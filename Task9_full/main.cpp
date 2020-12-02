@@ -7,9 +7,12 @@ void problem1(){
     printf("Введите размерность матрицы\n");
     scanf("%d %d", &m, &n);
     printf("Введите саму матрицу\n");
-    int arr[m][n];
-    for(int i = 0; i < m; ++i) for(int j = 0; j < n; ++j) scanf("%d", &arr[i][j]);
-    int arr_transformed[m * n];
+    int **arr= (int **) malloc(sizeof(int *) * n);
+    for(int i = 0; i < m; ++i) {
+        arr[i] = (int*) malloc(sizeof(int) * m);
+        for(int j = 0; j < n; ++j) scanf("%d", &arr[i][j]);
+    }
+    int *arr_transformed = (int *) malloc(sizeof(int) * (n * m));
 
     for(int i = 0; i < m; ++i) for(int j = 0; j < n; ++j) {
 
@@ -21,7 +24,8 @@ void problem1(){
 
     }
 
-    int arr_transformed_inverse[m][n];
+    int **arr_transformed_inverse = (int **) malloc(sizeof(int *) * n);
+    for(int i = 0; i < n; ++i) arr_transformed_inverse[i] = (int *) malloc(sizeof(int) * n);
     for(int i = 0; i < m * n; ++i){
         arr_transformed_inverse[i / m][i % m]= arr_transformed[i];
     }
@@ -38,10 +42,13 @@ void problem1(){
 }
 
 
+
+
 void problem2_1(int n, int m){
-    int arr[n][m];
+    int **arr = (int **) malloc(sizeof(int  *) * n);
 
     for(int i = 0; i < n; ++i){
+        arr[i] = (int *) malloc(sizeof(int) * m);
         for(int j = 0; j < m; ++j){
             arr[i][j] = abs(i - j) + 1;
         }
@@ -61,11 +68,14 @@ void problem2_1(int n, int m){
 
 void problem2_2(int n, int m){
 
-    int arr[n][m];
+    int **arr = (int**) malloc(sizeof(int *) * n);
 
     int c = 1;
     int k = 0;
-    for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) arr[i][j] = 0;
+    for(int i = 0; i < n; ++i) {
+        arr[i] = (int *) malloc(sizeof(int) * m);
+        for(int j = 0; j < m; ++j) arr[i][j] = 0;
+    }
     while(c < n * m){
         //Заполняем верхнюю часть матрицы
         for(int j =  k; j < m - k - 1; ++j){
@@ -101,6 +111,16 @@ void problem2_2(int n, int m){
         }
 
 }
+
+void problem2(){
+    int n, m;
+    printf("Введите размер матрицы\n");
+    scanf("%d %d", &n, &m);
+    problem2_1(n, m);
+    printf("\n");
+    problem2_2(n, m);
+}
+
 
 void gauss(double **arr, int n, int m){
 
@@ -218,37 +238,41 @@ void problem7(){
 
 }
 
-for(int i = 0; i < m; ++i){
-        for(int j = 0; j < n; ++j){
-            printf("%d ", arr_transformed_inverse[i][j]);
-        }
-        printf("\n");
-        }
 
 
 
 
 
 int main(){
-    int choose;
-    printf("Выберите номер задачи:\n");
-    scanf("%d", &choose);
-    int n, m;
-    switch(choose){
-        case 1: problem1(); break;
-        case 2:
-            printf("Введите размер матрицы\n");
-            scanf("%d %d", &n, &m);
-            problem2_1(n, m); printf("\n"); problem2_2(n, m);
-            break;
+    int choose = 1;
 
-        case 5: problem5(); break;
-        case 6: problem6(); break;
-        case 7: problem7(); break;
-        default: break;
 
+    while(choose) {
+        printf("Выберите номер задачи:\n");
+        scanf("%d", &choose);
+
+        switch (choose) {
+            case 1:
+                problem1();
+                break;
+            case 2:
+                problem2();
+                break;
+
+            case 5:
+                problem5();
+                break;
+            case 6:
+                problem6();
+                break;
+            case 7:
+                problem7();
+                break;
+            default:
+                break;
+
+        }
     }
-
 
 
 
