@@ -148,7 +148,7 @@ void gauss(double **a,int n, int m) {
         if (max < eps) {
 
             printf("Решения нет");
-            return 0;
+            return;
         }
 
         double *temp = (double*) malloc(sizeof(double) * m);
@@ -203,8 +203,8 @@ void problem5(){
     }
 
     for(int i = 0; i < n; ++i) {
-        for(int j = 0; j < m; ++j) printf("%lf ", arr[i][j]);
-        printf("\n");
+        printf("x%d = %lf \n",i + 1, arr[i][n]);
+
     }
 
 }
