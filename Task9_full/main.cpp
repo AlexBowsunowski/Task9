@@ -121,44 +121,89 @@ void problem2(){
     problem2_2(n, m);
 }
 
-
-void gauss(double **arr, int n, int m){
-
+void change_matrix(double **arr, int n, int m){
     for(int i = 0; i < n; ++i){
-
-        for(int k = i + 1; k < n; ++k){
-            double t = arr[k][i] / arr[i][i];
-            arr[k][i] =  0;
-            for(int l = i + 1; l < m; ++l) arr[k][l] -= t * arr[i][l];
-        }
 
     }
-
 }
 
+void gauss(double **a,int n, int m) {
+    double  max;
+    int k, index;
+    const double eps = 0.00001;
+
+
+    k = 0;
+    while (k < n) {
+
+        max = abs(a[k][k]);
+        index = k;
+        for (int i = k + 1; i < n; i++) {
+            if (abs(a[i][k]) > max){
+                max = abs(a[i][k]);
+                index = i;
+            }
+        }
+
+        if (max < eps) {
+
+            printf("Решения нет");
+            return 0;
+        }
+
+        double *temp = (double*) malloc(sizeof(double) * m);
+        temp = a[index];
+        a[index] = a[k];
+        a[k] = temp;
+
+
+        for (int i = k; i < n; i++){
+            double temp = a[i][k];
+            if (abs(temp) < eps) continue;
+            for (int j = 0; j < m; j++) 
+                a[i][j] /= temp;
+            
+            if (i == k)  continue;
+            for (int j = 0; j < m; j++)
+                a[i][j] = a[i][j] - a[k][j];
+        }
+        k++;
+
+    }
+}
+
+
+
 void problem5(){
-    int n;
+    int n, m;
     printf("Введите размер матрицы:\n");
     scanf("%d", &n);
+    m = n + 1;
     double **arr = (double **) malloc(sizeof(double *) * n);
-    printf("Введите саму матрицу\n");
+    printf("Введите матрицу с дополнительным столбцом, являющимся правой частью уравнения \n");
     for(int i = 0; i < n; ++i){
-        arr[i] = (double *) malloc(sizeof(double) * n);
-        for(int j = 0; j < n; ++j){
+        arr[i] = (double *) malloc(sizeof(double) * (n + 1));
+        for(int j = 0; j < m; ++j){
             scanf("%lf", &arr[i][j]);
         }
 
     }
 
-    gauss(arr, n, n);
-    for(int i = 0; i < n; ++i){
-        double h = arr[i][i];
-        for(int j = i; j < n; ++j){
-            arr[i][j] /= h;
+    gauss(arr, n, m);
+
+    for(int i = n - 1; i >= 0; --i){
+
+        for(int k = i - 1; k >= 0 ; --k) {
+            double h = arr[k][i];
+            for (int j = i; j < n + 1; ++j) {
+                arr[k][j] -= arr[i][j] * h;
+
+            }
         }
     }
+
     for(int i = 0; i < n; ++i) {
-        for(int j = 0; j < n; ++j) printf("%lf ", arr[i][j]);
+        for(int j = 0; j < m; ++j) printf("%lf ", arr[i][j]);
         printf("\n");
     }
 
